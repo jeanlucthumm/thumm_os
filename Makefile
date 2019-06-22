@@ -1,12 +1,15 @@
-all: boot_simple
+all: boot_sect
 
-boot_simple: boot_sect_simple
+EXEC = boot_sect.bin
 
-boot_sect_simple: boot_sect_simple.asm
-	nasm -f bin boot_sect_simple.asm -o boot_sect.bin
+boot_sect: $(EXEC)
+
+
+%.bin: %.asm
+	nasm -f bin $< -o $@
 
 clean:
-	@rm -rf *.bin
+	@rm -rf *.bin *.o
 
-run: boot_simple
-	qemu-system-x86_64 -drive format=raw,file=boot_sect.bin
+run: $(EXEC)
+	qemu-system-x86_64 -drive format=raw,file=$(EXEC)
